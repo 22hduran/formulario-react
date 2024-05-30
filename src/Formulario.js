@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Formulario = () => {
+const Formulario = ({ agregarTarjeta, tarjeta }) => {
   const [titulo, setTitulo] = useState('');
   const [precio, setPrecio] = useState('');
   const [descripcion, setDescripcion] = useState('');
 
+  useEffect(() => {
+    if (tarjeta) {
+      setTitulo(tarjeta.titulo);
+      setPrecio(tarjeta.precio);
+      setDescripcion(tarjeta.descripcion);
+    } else {
+      setTitulo('');
+      setPrecio('');
+      setDescripcion('');
+    }
+  }, [tarjeta]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí podrías hacer algo con los datos si quisieras
-    console.log({ titulo, precio, descripcion });
-    // Limpia los campos después de enviar el formulario
+    const nuevaTarjeta = {
+      titulo,
+      precio,
+      descripcion
+    };
+    agregarTarjeta(nuevaTarjeta);
     setTitulo('');
     setPrecio('');
     setDescripcion('');
@@ -43,7 +58,7 @@ const Formulario = () => {
           required
         />
       </div>
-      <button type="submit">Enviar</button>
+      <button type="submit">{tarjeta ? 'Actualizar' : 'Enviar'}</button>
     </form>
   );
 };
